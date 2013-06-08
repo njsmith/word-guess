@@ -1,4 +1,19 @@
 <h1>The Form</h1>
+
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js">
+</script>
+</head>
+
+<script  language=javascript>  
+<!-- Initialize Variables -->
+var text = [ ["The", "dog", "is", "good."], 
+             ["The", "cat", "is", "better."] ]
+var startWord = 1;
+var wordGap = 2;
+var div_index = 2;
+</script>
+
 <script  language=javascript>  
 function  check()
 {
@@ -14,11 +29,45 @@ function  check()
        form.elements['word1'].value = word;    
        document.getElementById("user_display").style.display = "inline"; 
        document.getElementById("word1_display").style.display = "none"; 
+      
+       document.write(text[0][1]);
     }
 }  
+
+$(document).ready(function(){
+    $("#main_text").append('<div id="word_display1234" style="display:none">');
+    //$("#main_text").append('</div>');
+    $("#main_text").append('<div id="word_display1" style="display:none">');
+    for(var i = 0; i < text.length; i++){
+        var guess_word_index = startWord;
+	for(var j = 0; j < text[i].length; j++){
+            if(j == guess_word_index){
+	        guess_word_index = guess_word_index + wordGap + 1;
+		$("#main_text").append("</div>");
+
+		$("#main_text").append("<div id=\"word_display" + div_index +  "\" style=\"display:none\">");
+                div_index++;
+		$("#main_text").append("<b> " + text[i][j] + "</b>");
+		$("#main_text").append("</div>");
+
+		$("#main_text").append("<div id=\"word_display" + div_index +  "\" style=\"display:none\">");
+                div_index++;
+		$("#main_text").append(text[i][j] + " ");
+            }
+	    else{
+		$("#main_text").append(text[i][j] + " ");
+            }
+        }
+    }
+    $("#main_text").append("</div>");
+});
 </script> 
 <form action="" method="post" name="FirstForm">
     {{form.hidden_tag()}}
+
+    <p id="main_text">
+    </p>
+
     The dog is 
     <div id="word1_display" style="display:inline">
       <input type="text" name="inputWord1" id="inputWord1" onkeydown="check()">
