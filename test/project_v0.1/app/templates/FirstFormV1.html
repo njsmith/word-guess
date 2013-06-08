@@ -1,0 +1,53 @@
+<h1>The Form</h1>
+
+<script  language=javascript>  
+<!-- Initialize Variables -->
+var text = [ ["The", "dog", "is", "good."], 
+             ["The", "cat", "is", "better."] ]
+var startWord = 1;
+var wordGap = 1;
+</script>
+
+<script  language=javascript>  
+function  check()
+{
+    if(event.keyCode == 13){
+       var word = document.getElementById("inputWord1").value;
+       if(word == "yes"){
+          alert("Match");
+       }
+       else{
+          alert(word);
+       }
+       form = document.forms['FirstForm'];
+       form.elements['word1'].value = word;    
+       document.getElementById("user_display").style.display = "inline"; 
+       document.getElementById("word1_display").style.display = "none"; 
+      
+       document.write(text[0][1]);
+    }
+}  
+</script> 
+<form action="" method="post" name="FirstForm">
+    {{form.hidden_tag()}}
+    The dog is 
+    <div id="word1_display" style="display:inline">
+      <input type="text" name="inputWord1" id="inputWord1" onkeydown="check()">
+    </div>
+
+    <div id="word2_display" style="display:none">
+      <input type="text" name="inputWord2" id="inputWord2" onkeydown="check()">
+    </div>
+    <!--input id="Button1" type="button"  value="Check" onclick="check()" /-->
+    <div id="user_display" style="display:none">
+        <u>cute</u>.
+        <p>
+          What is your name?:
+          {{form.name(size=20)}}
+        </p>
+    <p><input type= button value="Submit!" onclick="this.form.submit();"></p>
+    </div>
+    <div id="words_display" style="display:none">
+        {{form.word1}}
+    </div>
+</form>
