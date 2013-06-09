@@ -1,9 +1,9 @@
-<h1>The Form</h1>
-
 <head>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js">
 </script>
 </head>
+
+<h1>The Form</h1>
 
 <script  language=javascript>  
 <!-- Initialize Variables -->
@@ -11,7 +11,9 @@ var text = [ ["The", "dog", "is", "good."],
              ["The", "cat", "is", "better."] ]
 var startWord = 1;
 var wordGap = 2;
-var div_index = 2;
+var div_index = 1;
+
+var temp_sentence = "";
 </script>
 
 <script  language=javascript>  
@@ -35,31 +37,29 @@ function  check()
 }  
 
 $(document).ready(function(){
-    $("#main_text").append('<div id="word_display1234" style="display:none">');
-    //$("#main_text").append('</div>');
-    $("#main_text").append('<div id="word_display1" style="display:none">');
     for(var i = 0; i < text.length; i++){
         var guess_word_index = startWord;
-	for(var j = 0; j < text[i].length; j++){
+		for(var j = 0; j < text[i].length; j++){
             if(j == guess_word_index){
-	        guess_word_index = guess_word_index + wordGap + 1;
-		$("#main_text").append("</div>");
-
-		$("#main_text").append("<div id=\"word_display" + div_index +  "\" style=\"display:none\">");
-                div_index++;
-		$("#main_text").append("<b> " + text[i][j] + "</b>");
-		$("#main_text").append("</div>");
-
-		$("#main_text").append("<div id=\"word_display" + div_index +  "\" style=\"display:none\">");
-                div_index++;
-		$("#main_text").append(text[i][j] + " ");
-            }
-	    else{
-		$("#main_text").append(text[i][j] + " ");
-            }
-        }
-    }
-    $("#main_text").append("</div>");
+				guess_word_index = guess_word_index + wordGap + 1;
+					
+				var temp = '<div id="word_display' + div_index + '" style="display:inline">' + temp_sentence + '</div>';
+				$("#main_text").append(temp);
+				temp_sentence = text[i][j] + " ";
+				div_index++;
+					
+				var guess_word = "<u>" + text[i][j] + "</u>" + " ";
+				temp = '<div id="word_display' + div_index +  '" style="display:inline">' + guess_word + '</div>';
+				$("#main_text").append(temp);
+				div_index++;
+			}
+			else{
+				temp_sentence = temp_sentence +  text[i][j] + " ";
+			}
+		}
+	}
+	var temp = '<div id="word_display' + div_index + '" style="display:inline">' + temp_sentence + '</div>';
+	$("#main_text").append(temp);
 });
 </script> 
 <form action="" method="post" name="FirstForm">
