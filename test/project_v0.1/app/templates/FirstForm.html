@@ -17,7 +17,7 @@ var temp_sentence = "";
 </script>
 
 <script  language=javascript>  
-function  check()
+function  check_O()
 {
     if(event.keyCode == 13){
        var word = document.getElementById("inputWord1").value;
@@ -36,6 +36,31 @@ function  check()
     }
 }  
 
+function  check( current_index )
+{
+    if(event.keyCode == 13){
+       var word = document.getElementById("inputWord").value;
+       if(word == "yes"){
+          alert("Match");
+       }
+       else{
+          alert(word);
+       }
+       //form = document.forms['FirstForm'];
+       //form.elements['word1'].value = word;    
+	   var hind_current_input = "word_display" + current_index;
+	   document.getElementById(hind_current_input).style.display = "none";
+	   var next_index = current_index + 1; 
+	   var display_next_text = "word_display" + next_index;
+       document.getElementById(display_next_text).style.display = "inline"; 
+	   next_index++; 
+	   display_next_text = "word_display" + next_index;
+       document.getElementById(display_next_text).style.display = "inline"; 
+	   
+	   document.getElementById("inputWord").value = "";
+    }
+}  
+
 $(document).ready(function(){
     for(var i = 0; i < text.length; i++){
         var guess_word_index = startWord;
@@ -43,13 +68,13 @@ $(document).ready(function(){
             if(j == guess_word_index){
 				guess_word_index = guess_word_index + wordGap + 1;
 					
-				var temp = '<div id="word_display' + div_index + '" style="display:inline">' + temp_sentence + '</div>';
+				var temp = '<div id="word_display' + div_index + '" style="display:none">' + temp_sentence + '</div>';
 				$("#main_text").append(temp);
-				temp_sentence = text[i][j] + " ";
+				temp_sentence = "<u>" + text[i][j] + "</u>" + " ";
 				div_index++;
 					
-				var guess_word = "<u>" + text[i][j] + "</u>" + " ";
-				temp = '<div id="word_display' + div_index +  '" style="display:inline">' + guess_word + '</div>';
+				var guess_word = '<input type="text" name="inputWord" id="inputWord" onkeydown="check(' + div_index + ')">';
+				temp = '<div id="word_display' + div_index +  '" style="display:none">' + guess_word + '</div>';
 				$("#main_text").append(temp);
 				div_index++;
 			}
@@ -58,8 +83,11 @@ $(document).ready(function(){
 			}
 		}
 	}
-	var temp = '<div id="word_display' + div_index + '" style="display:inline">' + temp_sentence + '</div>';
+	var temp = '<div id="word_display' + div_index + '" style="display:none">' + temp_sentence + '</div>';
 	$("#main_text").append(temp);
+	
+	document.getElementById("word_display1").style.display = "inline"; 
+	document.getElementById("word_display2").style.display = "inline"; 
 });
 </script> 
 <form action="" method="post" name="FirstForm">
