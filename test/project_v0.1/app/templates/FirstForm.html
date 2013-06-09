@@ -14,6 +14,16 @@ var wordGap = 2;
 var div_index = 1;
 
 var temp_sentence = "";
+
+var array_index = 0;
+var name = "";
+var input_word = [];
+for(var ini = 0; ini <100;ini++){
+	input_word[ini] = "";
+}
+var data = [name,
+			input_word
+			];
 </script>
 
 <script  language=javascript>  
@@ -36,15 +46,17 @@ function  check_O()
     }
 }  
 
-function  check( current_index )
+function  check( current_index, local_array_index )
 {
     if(event.keyCode == 13){
-       var word = document.getElementById("inputWord").value;
+	   var inputWord_index = "inputWord" + local_array_index;
+       var word = document.getElementById(inputWord_index).value;
+	   data[1][local_array_index] = word;
        if(word == "yes"){
           alert("Match");
        }
        else{
-          alert(word);
+          alert(data[1][local_array_index]);
        }
        //form = document.forms['FirstForm'];
        //form.elements['word1'].value = word;    
@@ -57,9 +69,14 @@ function  check( current_index )
 	   display_next_text = "word_display" + next_index;
        document.getElementById(display_next_text).style.display = "inline"; 
 	   
-	   document.getElementById("inputWord").value = "";
+	   //document.getElementById("inputWord").value = "";
     }
 }  
+
+function dispaly_result()
+{
+	$("#result").text(data[1]);
+}
 
 $(document).ready(function(){
     for(var i = 0; i < text.length; i++){
@@ -73,7 +90,8 @@ $(document).ready(function(){
 				temp_sentence = "<u>" + text[i][j] + "</u>" + " ";
 				div_index++;
 					
-				var guess_word = '<input type="text" name="inputWord" id="inputWord" onkeydown="check(' + div_index + ')">';
+				var guess_word = '<input type="text" name="inputWord" id="inputWord' + array_index + '" onkeydown="check(' + div_index + ',' + array_index +')">';
+				array_index++;
 				temp = '<div id="word_display' + div_index +  '" style="display:none">' + guess_word + '</div>';
 				$("#main_text").append(temp);
 				div_index++;
@@ -95,6 +113,11 @@ $(document).ready(function(){
 
     <p id="main_text">
     </p>
+    
+    <p id="result">
+    </p>
+
+	<p><input type= button value="Display Result" onclick="dispaly_result()"></p>
 
     The dog is 
     <div id="word1_display" style="display:inline">
