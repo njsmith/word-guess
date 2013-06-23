@@ -14,39 +14,19 @@ var wordGap = 2;
 var div_index = 1;
 
 var temp_sentence = "";
+var display_text = [];
+var display_text_index = 0;
 
 var array_index = 0;
 var name = "";
 var input_word = [];
-for(var ini = 0; ini <100;ini++){
-	input_word[ini] = "";
-}
 var data = [name,
 			input_word
 			];
 </script>
 
 <script  language=javascript>  
-function  check_O()
-{
-    if(event.keyCode == 13){
-       var word = document.getElementById("inputWord1").value;
-       if(word == "yes"){
-          alert("Match");
-       }
-       else{
-          alert(word);
-       }
-       form = document.forms['FirstForm'];
-       form.elements['word1'].value = word;    
-       document.getElementById("user_display").style.display = "inline"; 
-       document.getElementById("word1_display").style.display = "none"; 
-      
-       document.write(text[0][1]);
-    }
-}  
-
-function  check( current_index, local_array_index )
+function  check2( current_index, local_array_index )
 {
     if(event.keyCode == 13){
 	   var inputWord_index = "inputWord" + local_array_index;
@@ -73,6 +53,28 @@ function  check( current_index, local_array_index )
     }
 }  
 
+function check()
+{
+    if(event.keyCode == 13){
+	   var word = document.getElementById("inputWord").value;
+	   data[1][array_index] = word;
+	   if(word == "yes"){
+		  alert("Match");
+	   }
+	   else{
+		  alert(data[1][array_index]);
+	   }
+	   
+	   array_index++;
+	   $("#main_text").append( display_text[array_index] );
+	   document.getElementById("inputWord").value = "";
+	   
+	   if(array_index + 2> display_text.length){
+		   document.getElementById("input_text").style.display = "none";
+	   }
+	}
+}  
+
 function dispaly_result()
 {
 	$("#result").text(data[1]);
@@ -85,33 +87,31 @@ $(document).ready(function(){
             if(j == guess_word_index){
 				guess_word_index = guess_word_index + wordGap + 1;
 					
-				var temp = '<div id="word_display' + div_index + '" style="display:none">' + temp_sentence + '</div>';
-				$("#main_text").append(temp);
+				display_text[display_text_index] = temp_sentence;
+				display_text_index++;
+				
 				temp_sentence = "<u>" + text[i][j] + "</u>" + " ";
-				div_index++;
-					
-				var guess_word = '<input type="text" name="inputWord" id="inputWord' + array_index + '" onkeydown="check(' + div_index + ',' + array_index +')">';
-				array_index++;
-				temp = '<div id="word_display' + div_index +  '" style="display:none">' + guess_word + '</div>';
-				$("#main_text").append(temp);
-				div_index++;
 			}
 			else{
 				temp_sentence = temp_sentence +  text[i][j] + " ";
 			}
 		}
 	}
-	var temp = '<div id="word_display' + div_index + '" style="display:none">' + temp_sentence + '</div>';
-	$("#main_text").append(temp);
+	display_text[display_text_index] = temp_sentence; 
 	
-	document.getElementById("word_display1").style.display = "inline"; 
-	document.getElementById("word_display2").style.display = "inline"; 
+	$("#main_text").append( display_text[0]);
 });
 </script> 
 <form action="" method="post" name="FirstForm">
     {{form.hidden_tag()}}
-
-    <p id="main_text">
+	
+    <p>
+    <div id="main_text" style="display:inline">
+    </div>
+    
+    <div id="input_text" style="display:inline">
+    	<input type="text" id="inputWord" onkeydown="check()">
+    </div>
     </p>
     
     <p id="result">
@@ -119,14 +119,6 @@ $(document).ready(function(){
 
 	<p><input type= button value="Display Result" onclick="dispaly_result()"></p>
 
-    The dog is 
-    <div id="word1_display" style="display:inline">
-      <input type="text" name="inputWord1" id="inputWord1" onkeydown="check()">
-    </div>
-
-    <div id="word2_display" style="display:none">
-      <input type="text" name="inputWord2" id="inputWord2" onkeydown="check()">
-    </div>
     <!--input id="Button1" type="button"  value="Check" onclick="check()" /-->
     <div id="user_display" style="display:none">
         <u>cute</u>.
@@ -138,5 +130,7 @@ $(document).ready(function(){
     </div>
     <div id="words_display" style="display:none">
         {{form.word1}}
+        
+        <input type="text" name="inputWord2" id="inputWord2" onkeydown="check()">
     </div>
 </form>
