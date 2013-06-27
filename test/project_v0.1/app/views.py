@@ -4,6 +4,9 @@ from app import app, db, lm, oid
 from forms import LoginForm, FirstForm
 from models import User, ROLE_USER, ROLE_ADMIN
 
+from texts import text_dict
+import time
+
 # index view function suppressed for brevity
 
 @app.route('/')
@@ -81,14 +84,28 @@ def FillFirstForm():
         print form.errors
     if form.validate_on_submit():
         name = form.name.data
-        getWord1 = form.word1.data
-        user = User(nickname = name, email = "abc", role = ROLE_USER, word1 = getWord1)
-        db.session.add(user)
-        db.session.commit()
+        getData = form.data.data
+
+        saveData = open("data.txt", "a")
+        #Remember Time first
+        saveData.write( time.strftime('%Y-%m-%d %H-%M-%S',time.localtime(time.time())) )
+        saveData.write("\n")
+        saveData.write(name)
+        saveData.write("\n")
+        saveData.write(getData)
+        saveData.write("\n")
+        saveData.write("\n")  
+        saveData.close()      
+        #user = User(nickname = name, email = "abc", role = ROLE_USER, data = getData)
+        #db.session.add(user)
+        #db.session.commit()
         return redirect(url_for('ThankYou'))
     return render_template('FirstForm.html', 
         title = 'First Form',
-        form = form)
+        form = form,
+        text = ( text_dict[0][0] ),
+        textlen = len(text_dict[0][0]) 
+        )
 
 @app.route('/ThankYou')
 def ThankYou():
