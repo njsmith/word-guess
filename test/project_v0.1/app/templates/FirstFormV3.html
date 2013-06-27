@@ -1,0 +1,136 @@
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js">
+</script>
+</head>
+
+<h1>The Form</h1>
+
+<script  language=javascript>  
+<!-- Initialize Variables -->
+var text = [ ["The", "dog", "is", "good."], 
+             ["The", "cat", "is", "better."] ]
+var startWord = 1;
+var wordGap = 2;
+var div_index = 1;
+
+var temp_sentence = "";
+var display_text = [];
+var display_text_index = 0;
+
+var array_index = 0;
+var name = "";
+var input_word = [];
+var data = [name,
+			input_word
+			];
+</script>
+
+<script  language=javascript>  
+function  check2( current_index, local_array_index )
+{
+    if(event.keyCode == 13){
+	   var inputWord_index = "inputWord" + local_array_index;
+       var word = document.getElementById(inputWord_index).value;
+	   data[1][local_array_index] = word;
+       if(word == "yes"){
+          alert("Match");
+       }
+       else{
+          alert(data[1][local_array_index]);
+       }
+       //form = document.forms['FirstForm'];
+       //form.elements['word1'].value = word;    
+	   var hind_current_input = "word_display" + current_index;
+	   document.getElementById(hind_current_input).style.display = "none";
+	   var next_index = current_index + 1; 
+	   var display_next_text = "word_display" + next_index;
+       document.getElementById(display_next_text).style.display = "inline"; 
+	   next_index++; 
+	   display_next_text = "word_display" + next_index;
+       document.getElementById(display_next_text).style.display = "inline"; 
+	   
+	   //document.getElementById("inputWord").value = "";
+    }
+}  
+
+function check()
+{
+    if(event.keyCode == 13){
+	   var word = document.getElementById("inputWord").value;
+	   data[1][array_index] = word;
+	   if(word == "yes"){
+		  alert("Match");
+	   }
+	   else{
+		  alert(data[1][array_index]);
+	   }
+	   
+	   array_index++;
+	   $("#main_text").append( display_text[array_index] );
+	   document.getElementById("inputWord").value = "";
+	   
+	   if(array_index + 2> display_text.length){
+		   document.getElementById("input_text").style.display = "none";
+	   }
+	}
+}  
+
+function dispaly_result()
+{
+	$("#result").text(data[1]);
+}
+
+$(document).ready(function(){
+    for(var i = 0; i < text.length; i++){
+        var guess_word_index = startWord;
+		for(var j = 0; j < text[i].length; j++){
+            if(j == guess_word_index){
+				guess_word_index = guess_word_index + wordGap + 1;
+					
+				display_text[display_text_index] = temp_sentence;
+				display_text_index++;
+				
+				temp_sentence = "<u>" + text[i][j] + "</u>" + " ";
+			}
+			else{
+				temp_sentence = temp_sentence +  text[i][j] + " ";
+			}
+		}
+	}
+	display_text[display_text_index] = temp_sentence; 
+	
+	$("#main_text").append( display_text[0]);
+});
+</script> 
+<form action="" method="post" name="FirstForm">
+    {{form.hidden_tag()}}
+	
+    <p>
+    <div id="main_text" style="display:inline">
+    </div>
+    
+    <div id="input_text" style="display:inline">
+    	<input type="text" id="inputWord" onkeydown="check()">
+    </div>
+    </p>
+    
+    <p id="result">
+    </p>
+
+	<p><input type= button value="Display Result" onclick="dispaly_result()"></p>
+
+    <!--input id="Button1" type="button"  value="Check" onclick="check()" /-->
+    <div id="user_display" style="display:none">
+        <u>cute</u>.
+        <p>
+          What is your name?:
+          {{form.name(size=20)}}
+        </p>
+    <p><input type= button value="Submit!" onclick="this.form.submit();"></p>
+    </div>
+    <div id="words_display" style="display:none">
+        {{form.word1}}
+        
+        <input type="text" name="inputWord2" id="inputWord2" onkeydown="check()">
+    </div>
+</form>
