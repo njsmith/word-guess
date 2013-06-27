@@ -64,10 +64,13 @@ function dispaly_result()
 
 $(document).ready(function(){
     //Load text to array
+    var the_index = 0;
     {% for i in range (0, textlen): %}
-        var the_index = {{i}};
-        text_array[the_index] = { "number" : '{{text[i][0]}}', "word": '{{text[i][1]}}' };
-	//$("#main_text").append( text_array[the_index].number +  text_array[the_index].word );
+        {% for j in range (0, paraglen[i]): %}
+           text_array[the_index] = { "number" : '{{text[i][j][0]}}', "word": '{{text[i][j][1]}}' };
+           the_index++;
+	   //$("#main_text").append( text_array[the_index].number);
+        {% endfor %}
     {% endfor %}
 
      var guess_word_index = startWord;
