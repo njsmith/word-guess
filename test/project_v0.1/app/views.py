@@ -6,6 +6,7 @@ from models import User, ROLE_USER, ROLE_ADMIN
 
 from texts import text_dict
 import time
+import random
 
 # index view function suppressed for brevity
 
@@ -100,11 +101,27 @@ def FillFirstForm():
         #db.session.add(user)
         #db.session.commit()
         return redirect(url_for('ThankYou'))
+
+    # Text
+    select_text_index = random.randint(0,17)
+    if select_text_index == 16:
+        select_text_index = 18
+    if select_text_index == 17:
+        select_text_index = 19
+    select_text = text_dict[select_text_index]
+    iniNum = 0
+    parag_num = len(select_text)
+    paraglen = [iniNum for i in range(20)]
+    for parag in range (0, parag_num):
+        paraglen[parag] = len(select_text[parag])
+        print paraglen[parag]
+
     return render_template('FirstForm.html', 
         title = 'First Form',
         form = form,
-        text = ( text_dict[0][0] ),
-        textlen = len(text_dict[0][0]) 
+        text = (select_text ),
+        textlen = len(select_text) ,
+        paraglen = paraglen
         )
 
 @app.route('/ThankYou')
