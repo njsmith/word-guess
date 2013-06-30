@@ -3,7 +3,17 @@
 </script>
 </head>
 
-<h1>The Form</h1>
+<h1>The Word-Guess Experiment</h1>
+
+<hr>
+<h2>Instruction</h2>
+1. Read the text <br>
+2. Guess which word coming next <br>
+3. Input this word into the textfield <br>
+4. Press "enter" <br>
+5. Fill the participant information <br>
+6. Click the submit buttom  <br>
+<hr>
 
 <script  language=javascript>  
 <!-- Initialize Variables -->
@@ -52,15 +62,10 @@ function check()
                    document.getElementById("user_display").style.display = "inline";
 
                    form = document.forms['FirstForm'];
-                   form.elements['data'].value = JSON.stringify(data); 
+                   form.elements['main_data'].value = JSON.stringify(data); 
 	   }
 	}
 }  
-
-function dispaly_result()
-{
-	$("#result").text(data[1]);
-}
 
 $(document).ready(function(){
     //Load text to array
@@ -71,6 +76,7 @@ $(document).ready(function(){
            the_index++;
 	   //$("#main_text").append( text_array[the_index].number);
         {% endfor %}
+        text_array[the_index-1].word = text_array[the_index-1].word + "<br>";
     {% endfor %}
 
      var guess_word_index = startWord;
@@ -104,22 +110,22 @@ $(document).ready(function(){
     	<input type="text" id="inputWord" onkeydown="check()">
     </div>
     </p>
-    
-    <p id="result">
-    </p>
-
-	<p><input type= button value="Display Result" onclick="dispaly_result()"></p>
 
     <!--input id="Button1" type="button"  value="Check" onclick="check()" /-->
+    <hr>
     <div id="user_display" style="display:none">
         <p>
-          What is your name?:
-          {{form.name(size=20)}}
+          What is your native language?:
+          {{form.language}}
+        </p>
+	<p>
+          What is your age?:
+          {{form.age}}
         </p>
     <p><input type= button value="Submit!" onclick="this.form.submit();"></p>
     </div>
     <div id="words_display" style="display:inline">
-        {{form.data}}
+        {{form.main_data}}
         
         <input type="text" name="inputWord2" id="inputWord2" onkeydown="check()">
     </div>

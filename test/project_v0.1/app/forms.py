@@ -6,5 +6,6 @@ class LoginForm(Form):
     remember_me = BooleanField('remember_me', default = False)
 
 class FirstForm(Form):
-    name = TextField('name', validators = [Required()])
-    data = TextField('data', validators = [Required()])
+    language = TextField('language', validators = [Required()])
+    main_data = TextField('main_data', validators = [Required()])
+    age = TextField('age', validators = [Required()])

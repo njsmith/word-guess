@@ -84,22 +84,25 @@ def FillFirstForm():
         print form.validate_on_submit()
         print form.errors
     if form.validate_on_submit():
-        name = form.name.data
-        getData = form.data.data
+        language = form.language.data
+        getData = form.main_data.data
+        age = form.age.data
 
-        saveData = open("data.txt", "a")
+        #saveData = open("data.txt", "a")
         #Remember Time first
-        saveData.write( time.strftime('%Y-%m-%d %H-%M-%S',time.localtime(time.time())) )
-        saveData.write("\n")
-        saveData.write(name)
-        saveData.write("\n")
-        saveData.write(getData)
-        saveData.write("\n")
-        saveData.write("\n")  
-        saveData.close()      
-        #user = User(nickname = name, email = "abc", role = ROLE_USER, data = getData)
-        #db.session.add(user)
-        #db.session.commit()
+        #saveData.write( time.strftime('%Y-%m-%d %H-%M-%S',time.localtime(time.time())) )
+        #saveData.write("\n")
+        #saveData.write(name)
+        #saveData.write("\n")
+        #saveData.write(getData)
+        #saveData.write("\n")
+        #saveData.write("\n")  
+        #saveData.close()      
+        
+
+        user = User(nickname = "Tester", email = "abc", role = ROLE_USER, language = language, age = age, main_data = getData)
+        db.session.add(user)
+        db.session.commit()
         return redirect(url_for('ThankYou'))
 
     # Text
