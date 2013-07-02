@@ -19,8 +19,8 @@
 <!-- Initialize Variables -->
 var text = [ ["The", "dog", "is", "good."], 
              ["The", "cat", "is", "better."] ]
-var startWord = 1;
-var wordGap = 100;
+var startWord = {{start}};
+var wordGap = {{gap}};
 var div_index = 1;
 
 var temp_sentence = "";
@@ -68,6 +68,10 @@ function check()
 }  
 
 $(document).ready(function(){
+    // set text_index
+    form = document.forms['FirstForm'];
+    form.elements['text_index'].value = '{{select_text_index}}' + '-' + '{{start}}'; 
+
     //Load text to array
     var the_index = 0;
     {% for i in range (0, textlen): %}
@@ -126,6 +130,7 @@ $(document).ready(function(){
     </div>
     <div id="words_display" style="display:inline">
         {{form.main_data}}
+	{{form.text_index}}
         
         <input type="text" name="inputWord2" id="inputWord2" onkeydown="check()">
     </div>

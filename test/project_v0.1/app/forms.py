@@ -9,3 +9,4 @@ class FirstForm(Form):
     language = TextField('language', validators = [Required()])
     main_data = TextField('main_data', validators = [Required()])
     age = TextField('age', validators = [Required()])
+    text_index = TextField('age', validators = [Required()])

@@ -87,6 +87,7 @@ def FillFirstForm():
         language = form.language.data
         getData = form.main_data.data
         age = form.age.data
+        text_index = form.text_index.data
 
         #saveData = open("data.txt", "a")
         #Remember Time first
@@ -100,10 +101,15 @@ def FillFirstForm():
         #saveData.close()      
         
 
-        user = User(nickname = "Tester", email = "abc", role = ROLE_USER, language = language, age = age, main_data = getData)
+        user = User(nickname = "Tester", email = "abc", role = ROLE_USER, language = language, age = age, text_index = text_index, main_data = getData)
         db.session.add(user)
         db.session.commit()
         return redirect(url_for('ThankYou'))
+
+    # Start position
+    start = 1
+    # Gap
+    gap = 100
 
     # Text
     select_text_index = random.randint(0,17)
@@ -119,12 +125,17 @@ def FillFirstForm():
         paraglen[parag] = len(select_text[parag])
         print paraglen[parag]
 
+   
+
     return render_template('FirstForm.html', 
         title = 'First Form',
         form = form,
         text = (select_text ),
         textlen = len(select_text) ,
-        paraglen = paraglen
+        paraglen = paraglen,
+        start = start,
+        gap = gap,
+        select_text_index = select_text_index
         )
 
 @app.route('/ThankYou')

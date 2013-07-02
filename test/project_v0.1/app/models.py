@@ -9,6 +9,7 @@ class User(db.Model):
     email = db.Column(db.String(120), index = True, unique = False)
     role = db.Column(db.SmallInteger, default = ROLE_USER)
     posts = db.relationship('Post', backref = 'author', lazy = 'dynamic')
+    text_index = db.Column(db.String(1024), index = True, unique = False)
     language = db.Column(db.String(1024), index = True, unique = False)
     age = db.Column(db.String(1024), index = True, unique = False)
     main_data = db.Column(db.String(10240), index = True, unique = False)
