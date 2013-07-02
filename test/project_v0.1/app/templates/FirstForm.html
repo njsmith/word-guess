@@ -41,7 +41,7 @@ var data = [name,
 <script  language=javascript>  
 function check()
 {
-    if(event.keyCode == 13){
+    if(event.keyCode == 13 && document.getElementById("inputWord").value != "" && document.getElementById("inputWord").value != null){
 	   var word = document.getElementById("inputWord").value;
            var word_number = (input_word_index*wordGap) + startWord + input_word_index;
            input_word_index++;
