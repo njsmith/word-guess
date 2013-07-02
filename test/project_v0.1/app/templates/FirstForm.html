@@ -38,8 +38,6 @@ You won't be penalized for guessing wrong, but try to do the best you can.
 
 <script  language=javascript>  
 <!-- Initialize Variables -->
-var text = [ ["The", "dog", "is", "good."], 
-             ["The", "cat", "is", "better."] ]
 var startWord = {{start}};
 var wordGap = {{gap}};
 var div_index = 1;
@@ -52,11 +50,17 @@ var text_array = [];
 var input_word_index = 0;
 
 var array_index = 0;
-var name = "";
+var language = "";
+var dialect = "";
+var other_language = "";
+var age;
 var input_word = [];
-var data = [name,
-			input_word
-			];
+var data = [language,
+            dialect,
+            other_language,
+            age,
+	    input_word,
+	    ];
 </script>
 
 <script  language=javascript>  
@@ -66,7 +70,7 @@ function check()
 	   var word = document.getElementById("inputWord").value;
            var word_number = (input_word_index*wordGap) + startWord + input_word_index;
            input_word_index++;
-	   data[1][array_index] = [ text_array[word_number].number,word];
+	   data[4][array_index] = [ text_array[word_number].number,word];
 	   if(word == "yes"){
 		  alert("Match");
 	   }
@@ -87,6 +91,19 @@ function check()
 	   }
 	}
 }  
+
+function check_info()
+{
+        form = document.forms['FirstForm'];
+
+        data[0] = form.elements['language'].value;
+        data[1] = form.elements['dialect'].value;
+        data[2] = form.elements['other_language'].value;
+        data[3] = form.elements['age'].value;
+
+        form.elements['main_data'].value = JSON.stringify(data); 
+        form.submit();
+}
 
 $(document).ready(function(){
     // set text_index
@@ -140,12 +157,22 @@ $(document).ready(function(){
     <hr>
     <div id="user_display" style="display:none">
         <p>
-          What is your native language?:
+         What is your native language or languages?
+	 <input type="text" id="language">
         </p>
 	<p>
-          What is your age?:
+         What dialect of English do you speak? (E.g., New York, Midwest, Scottish, Indian, ...)
+	 <input type="text" id="dialect">
         </p>
-    <p><input type= button value="Submit!" onclick="this.form.submit();"></p>
+	<p>
+	  What other languages do you speak?
+	  <input type="text" id="other_language">
+	</p>
+	<p>
+	  How old are you?
+	  <input type="text" id="age">
+	</p>
+    <p><input type= button value="Submit!" onclick="check_info()"></p>
     </div>
     <div id="words_display" style="display:inline">
         {{form.main_data}}
