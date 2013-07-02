@@ -120,18 +120,14 @@ $(document).ready(function(){
     <div id="user_display" style="display:none">
         <p>
           What is your native language?:
-          {{form.language}}
         </p>
 	<p>
           What is your age?:
-          {{form.age}}
         </p>
     <p><input type= button value="Submit!" onclick="this.form.submit();"></p>
     </div>
     <div id="words_display" style="display:inline">
         {{form.main_data}}
 	{{form.text_index}}
-        
-        <input type="text" name="inputWord2" id="inputWord2" onkeydown="check()">
     </div>
 </form>
