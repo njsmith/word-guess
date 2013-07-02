@@ -1,10 +1,11 @@
-from texts import correct_para_texts as _texts, MUTILATED
+from texts import correct_para_texts as _texts, MUTILATED, PRACTICE
 from makescn import cm
 
 text_dict = {}
+title_dict = {}
 
 for text in _texts:
-    if text.type == MUTILATED:
+    if text.type in (MUTILATED, PRACTICE):
         continue
     paragraphs = []
     paragraph = []
@@ -23,3 +24,4 @@ for text in _texts:
     if paragraph:
         paragraphs.append(paragraph)
     text_dict[text.textid] = paragraphs
+    title_dict[text.textid] = text.title

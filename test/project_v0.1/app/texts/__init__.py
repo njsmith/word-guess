@@ -1,1 +1,1 @@
-from ben_texts import text_dict
+from ben_texts import text_dict, title_dict
