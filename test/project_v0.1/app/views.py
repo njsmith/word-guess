@@ -3,7 +3,7 @@ from app import app, db, lm, oid
 from forms import FirstForm
 from models import User, ROLE_USER, ROLE_ADMIN
 
-from texts import text_dict
+from texts import text_dict, title_dict
 import time
 import random
 
@@ -43,12 +43,9 @@ def FillFirstForm():
     gap = 100
 
     # Text
-    select_text_index = random.randint(0,17)
-    if select_text_index == 16:
-        select_text_index = 18
-    if select_text_index == 17:
-        select_text_index = 19
+    select_text_index = random.choice(text_dict.keys())
     select_text = text_dict[select_text_index]
+    select_title = title_dict[select_text_index]
     iniNum = 0
     parag_num = len(select_text)
     paraglen = [iniNum for i in range(20)]
@@ -61,6 +58,7 @@ def FillFirstForm():
     return render_template('FirstForm.html', 
         title = 'First Form',
         form = form,
+        text_title = select_title,
         text = (select_text ),
         textlen = len(select_text) ,
         paraglen = paraglen,
