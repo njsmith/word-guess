@@ -71,13 +71,7 @@ function check()
            var word_number = (input_word_index*wordGap) + startWord + input_word_index;
            input_word_index++;
 	   data[4][array_index] = [ text_array[word_number].number,word];
-	   if(word == "yes"){
-		  alert("Match");
-	   }
-	   else{
-		  alert(data[1][array_index]);
-	   }
-	   
+
 	   array_index++;
 	   $("#main_text").append( display_text[array_index] );
 	   document.getElementById("inputWord").value = "";
@@ -174,7 +168,7 @@ $(document).ready(function(){
 	</p>
     <p><input type= button value="Submit!" onclick="check_info()"></p>
     </div>
-    <div id="words_display" style="display:inline">
+    <div id="words_display" style="display:none">
         {{form.main_data}}
 	{{form.text_index}}
     </div>
