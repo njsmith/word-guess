@@ -37,10 +37,12 @@ def FillFirstForm():
         db.session.commit()
         return redirect(url_for('ThankYou'))
 
-    # Start position
+     # Start position
+    #start = random.randint(1, 1+gap)
     start = 1
     # Gap
-    gap = 100
+    gap = 3
+   
 
     # Text
     select_text_index = random.choice(text_dict.keys())
