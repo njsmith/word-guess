@@ -2,7 +2,14 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js">
 </script>
 </head>
-
+<style type="text/css">
+.text_container {
+   margin-right: 100px;
+}
+#input_text {
+   margin-right: -100px;
+}
+</style>
 <h1>The Word-Guess Experiment</h1>
 
 <hr>
@@ -75,6 +82,9 @@ function check()
 	   array_index++;
 	   $("#main_text").append( display_text[array_index] );
 	   document.getElementById("inputWord").value = "";
+
+           var input_textfield = document.getElementById("hr1");
+           input_textfield.scrollIntoView(false);
 	   
 	   if(array_index + 2> display_text.length){
 		   document.getElementById("input_text").style.display = "none";
@@ -82,6 +92,8 @@ function check()
 
                    form = document.forms['FirstForm'];
                    form.elements['main_data'].value = JSON.stringify(data); 
+
+                   document.getElementById("hr2").scrollIntoView(false);
 	   }
 	}
 }  
@@ -138,17 +150,16 @@ $(document).ready(function(){
 <form action="" method="post" name="FirstForm">
     {{form.hidden_tag()}}
 	
-    <p>
-    <div id="main_text" style="display:inline">
-    </div>
+    <p class="text_container">
+    <span id="main_text"></span>
     
-    <div id="input_text" style="display:inline">
+    <span id="input_text">
     	<input type="text" id="inputWord" onkeydown="check()">
-    </div>
+    </span>
     </p>
 
     <!--input id="Button1" type="button"  value="Check" onclick="check()" /-->
-    <hr>
+    <hr id="hr1">
     <div id="user_display" style="display:none">
         <p>
          What is your native language or languages?
@@ -166,9 +177,11 @@ $(document).ready(function(){
 	  How old are you?
 	  <input type="text" id="age">
 	</p>
-    <p><input type= button value="Submit!" onclick="check_info()"></p>
+    <p><input type= button  value="Submit!" onclick="check_info()"></p>
+    
+    <hr id="hr2">
     </div>
-    <div id="words_display" style="display:none">
+    <div id="words_display" style="display:inline">
         {{form.main_data}}
 	{{form.text_index}}
     </div>

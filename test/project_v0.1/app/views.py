@@ -17,6 +17,7 @@ def FillFirstForm():
         print form.validate_on_submit()
         print form.errors
     if form.validate_on_submit():
+        print 'Got it!'
         getData = form.main_data.data
         text_index = form.text_index.data
 
@@ -30,20 +31,18 @@ def FillFirstForm():
         #saveData.write("\n")
         #saveData.write("\n")  
         #saveData.close()      
-        
 
         user = User(text_index = text_index, main_data = getData)
         db.session.add(user)
         db.session.commit()
         return redirect(url_for('ThankYou'))
 
-     # Start position
-    #start = random.randint(1, 1+gap)
-    start = 1
     # Gap
     gap = 3
+    # Start position
+    start = random.randint(1, 1+gap)
+    #start = 1
    
-
     # Text
     select_text_index = random.choice(text_dict.keys())
     select_text = text_dict[select_text_index]
@@ -54,8 +53,6 @@ def FillFirstForm():
     for parag in range (0, parag_num):
         paraglen[parag] = len(select_text[parag])
         print paraglen[parag]
-
-   
 
     return render_template('FirstForm.html', 
         title = 'First Form',
