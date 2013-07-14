@@ -62,17 +62,22 @@ var dialect = "";
 var other_language = "";
 var age;
 var input_word = [];
+var event_log = [];
 var data = [language,
             dialect,
             other_language,
             age,
 	    input_word,
+            event_log,
 	    ];
 </script>
 
 <script  language=javascript>  
 function check()
 {
+    var word_number2 = (input_word_index*wordGap) + startWord + input_word_index;
+    log("keydown", text_array[word_number2].number, event.which);
+
     if(event.keyCode == 13 && document.getElementById("inputWord").value != "" && document.getElementById("inputWord").value != null){
 	   var word = document.getElementById("inputWord").value;
            var word_number = (input_word_index*wordGap) + startWord + input_word_index;
@@ -107,11 +112,26 @@ function check_info()
         data[2] = form.elements['other_language'].value;
         data[3] = form.elements['age'].value;
 
+        log("submit");
+
         form.elements['main_data'].value = JSON.stringify(data); 
         form.submit();
 }
 
+    //Let's just log everything, because it's a lot easier to throw away
+    //useless data than it is to re-run the experiment... 
+function log() {
+      //Stolen from
+      //   https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Functions_and_function_scope/arguments
+      var args = Array.prototype.slice.call(arguments);
+      args.unshift(new Date().toISOString());
+      console.log(args);
+      data[5].push(args);
+  }
+
 $(document).ready(function(){
+    log("start");
+
     // set text_index
     form = document.forms['FirstForm'];
     form.elements['text_index'].value = '{{select_text_index}}' + '-' + '{{start}}' + '-' +'{{gap}}'; 
@@ -181,7 +201,7 @@ $(document).ready(function(){
     
     <hr id="hr2">
     </div>
-    <div id="words_display" style="display:inline">
+    <div id="words_display" style="display:none">
         {{form.main_data}}
 	{{form.text_index}}
     </div>
