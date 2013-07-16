@@ -164,7 +164,10 @@ $(document).ready(function(){
 
     // set text_index
     form = document.forms['FirstForm'];
-    form.elements['text_index'].value = '{{select_text_index}}' + '-' + '{{start}}' + '-' +'{{gap}}'; 
+    form.elements['text_index'].value = '{{select_text_index}}'; 
+    form.elements['start_position'].value = '{{start}}';
+    form.elements['gap'].value = '{{gap}}';
+    form.elements['worker_id'].value = '{{worker_id}}';
 
     //Load text to array
     var the_index = 0;
@@ -233,7 +236,10 @@ $(document).ready(function(){
     <hr id="hr2">
     </div>
     <div id="words_display" style="display:none">
+        {{form.worker_id}}
         {{form.main_data}}
 	{{form.text_index}}
+	{{form.start_position}}
+	{{form.gap}}
     </div>
 </form>

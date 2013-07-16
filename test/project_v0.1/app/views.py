@@ -18,8 +18,11 @@ def FillFirstForm():
         print form.errors
     if form.validate_on_submit():
         print 'Got it!'
+        getWorker_id = form.worker_id.data
         getData = form.main_data.data
-        text_index = form.text_index.data
+        getText_index = form.text_index.data
+        getStart_position = form.start_position.data
+        getGap = form.gap.data
 
         #saveData = open("data.txt", "a")
         #Remember Time first
@@ -32,7 +35,7 @@ def FillFirstForm():
         #saveData.write("\n")  
         #saveData.close()      
 
-        user = User(text_index = text_index, main_data = getData)
+        user = User(worker_id = getWorker_id, text_index = getText_index, start_position = getStart_position, gap = getGap, main_data = getData)
         db.session.add(user)
         db.session.commit()
         return redirect(url_for('ThankYou'))
@@ -41,6 +44,10 @@ def FillFirstForm():
         is_preview = True
     else:
         is_preview = False
+
+    worker_id = None
+    if "workerId" in request.args:
+        worker_id = request.args["workerId"]
 
     # Gap
     gap = 3
@@ -69,7 +76,8 @@ def FillFirstForm():
         start = start,
         gap = gap,
         select_text_index = select_text_index,
-        is_preview = is_preview
+        is_preview = is_preview,
+        worker_id = worker_id
         )
 
 @app.route('/ThankYou')
