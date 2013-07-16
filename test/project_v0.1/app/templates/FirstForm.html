@@ -9,7 +9,37 @@
 #input_text {
    margin-right: -100px;
 }
+.overlay {
+    opacity: 0.3;
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    color: #fff;
+    padding-top: 100px;
+    padding-left: 200px;
+  }
+  .overlay-message {
+    z-index: 20;
+    position: absolute;
+    top: 50px;
+    right: 20px;
+    background-color: #800;
+    color: #fff;
+    padding: 5px;
+    opacity: 0.8;
+  }
 </style>
+
+{% if is_preview %}
+<div class="overlay"></div>
+<div class="overlay-message">PREVIEW MODE - CLICK "ACCEPT" ABOVE TO START THIS
+HIT</div>
+{% endif %}
+
 <h1>The Word-Guess Experiment</h1>
 
 <hr>
@@ -167,6 +197,7 @@ $(document).ready(function(){
 	
 });
 </script> 
+
 <form action="" method="post" name="FirstForm">
     {{form.hidden_tag()}}
 	

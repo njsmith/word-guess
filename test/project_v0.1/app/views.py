@@ -37,6 +37,11 @@ def FillFirstForm():
         db.session.commit()
         return redirect(url_for('ThankYou'))
 
+    if request.args["assignmentId"] == "ASSIGNMENT_ID_NOT_AVAILABLE":
+        is_preview = True
+    else:
+        is_preview = False
+
     # Gap
     gap = 3
     # Start position
@@ -63,7 +68,8 @@ def FillFirstForm():
         paraglen = paraglen,
         start = start,
         gap = gap,
-        select_text_index = select_text_index
+        select_text_index = select_text_index,
+        is_preview = is_preview
         )
 
 @app.route('/ThankYou')
