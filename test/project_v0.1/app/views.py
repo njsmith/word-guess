@@ -42,6 +42,16 @@ def FillFirstForm():
     worker_id = None
     if "workerId" in request.args:
         worker_id = request.args["workerId"]
+        
+    available_text = text_dict.keys()
+    have_done = User.query.filter_by(worker_id = worker_id)
+    for hit in have_done:
+        removed = int(hit.text_index)
+        print 'Removed: ' + str(removed)
+        available_text.remove(removed)
+    print available_text
+    if len(available_text) == 0 :
+        return render_template('Repeat.html')
 
     # Gap
     gap = 300
@@ -50,7 +60,7 @@ def FillFirstForm():
     #start = 1
    
     # Text
-    select_text_index = random.choice(text_dict.keys())
+    select_text_index = random.choice(available_text)
     select_text = text_dict[select_text_index]
     select_title = title_dict[select_text_index]
     iniNum = 0
@@ -77,6 +87,10 @@ def FillFirstForm():
 @app.route('/ThankYou')
 def ThankYou():
     return render_template('ThankYou.html')
+
+@app.route('/Repeat')
+def Repeat():
+    return render_template('Repeat.html')
 
 @app.route("/mmturkey.js")
 def mmturkey():
