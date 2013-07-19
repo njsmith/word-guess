@@ -47,11 +47,9 @@ def FillFirstForm():
     have_done = User.query.filter_by(worker_id = worker_id)
     for hit in have_done:
         removed = int(hit.text_index)
-        print 'Removed: ' + str(removed)
         available_text.remove(removed)
-    print available_text
     if len(available_text) == 0 :
-        return render_template('Repeat.html')
+        return redirect(url_for('Repeat'))
 
     # Gap
     gap = 300
