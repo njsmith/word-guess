@@ -48,11 +48,12 @@ def FillFirstForm():
     have_done = User.query.filter_by(worker_id = worker_id)
     for hit in have_done:
         removed = int(hit.text_index)
-        available_text.remove(removed)
+        if removed in available_text:
+            available_text.remove(removed)
     if len(available_text) == 0 :
         return redirect(url_for('Repeat'))
 
-    # Check text number
+    # Check the least text number
     temp_least = 99999
     need_remove = []
     for count in available_text:
