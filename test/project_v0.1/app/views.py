@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, session, url_for, request, g
+from flask import render_template, flash, redirect, session, url_for, request, g, send_file
 from app import app, db, lm, oid
 from forms import FirstForm
 from models import User, ROLE_USER, ROLE_ADMIN
@@ -16,24 +16,18 @@ def FillFirstForm():
     if request.method == 'POST':
         print form.validate_on_submit()
         print form.errors
-    if form.validate_on_submit():
+    #if form.validate_on_submit():
         print 'Got it!'
-        getWorker_id = form.worker_id.data
-        getData = form.main_data.data
-        getText_index = form.text_index.data
-        getStart_position = form.start_position.data
-        getGap = form.gap.data
-
-        #saveData = open("data.txt", "a")
-        #Remember Time first
-        #saveData.write( time.strftime('%Y-%m-%d %H-%M-%S',time.localtime(time.time())) )
-        #saveData.write("\n")
-        #saveData.write(name)
-        #saveData.write("\n")
-        #saveData.write(getData)
-        #saveData.write("\n")
-        #saveData.write("\n")  
-        #saveData.close()      
+        getWorker_id = request.form["worker_id"]
+        getData = request.form["result"]
+        getText_index = request.form["text_index"]
+        getStart_position = request.form["start_position"]
+        getGap = request.form["gap"]
+        #getWorker_id = form.worker_id.data
+        #getData = form.main_data.data
+        #getText_index = form.text_index.data
+        #getStart_position = form.start_position.data
+        #getGap = form.gap.data
 
         user = User(worker_id = getWorker_id, text_index = getText_index, start_position = getStart_position, gap = getGap, main_data = getData)
         db.session.add(user)
@@ -50,7 +44,7 @@ def FillFirstForm():
         worker_id = request.args["workerId"]
 
     # Gap
-    gap = 3
+    gap = 300
     # Start position
     start = random.randint(1, 1+gap)
     #start = 1
@@ -83,3 +77,7 @@ def FillFirstForm():
 @app.route('/ThankYou')
 def ThankYou():
     return render_template('ThankYou.html')
+
+@app.route("/mmturkey.js")
+def mmturkey():
+    return send_file("static/mmturkey/mmturkey.js")

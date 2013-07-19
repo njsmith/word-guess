@@ -1,6 +1,6 @@
 <head>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js">
-</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="{{url_for("mmturkey")}}?nowarn"></script>
 </head>
 <style type="text/css">
 .text_container {
@@ -75,6 +75,7 @@ You won't be penalized for guessing wrong, but try to do the best you can.
 
 <script  language=javascript>  
 <!-- Initialize Variables -->
+var submit_url = "{{url_for("FillFirstForm")}}";
 var startWord = {{start}};
 var wordGap = {{gap}};
 var div_index = 1;
@@ -145,7 +146,16 @@ function check_info()
         log("submit");
 
         form.elements['main_data'].value = JSON.stringify(data); 
-        form.submit();
+
+        $.post(submit_url, {"result": JSON.stringify(data),
+                            "worker_id": '{{worker_id}}',
+                            "text_index": '{{select_text_index}}',
+                            "start_position": '{{start}}',
+                            "gap": '{{gap}}'})
+                  .always(function() {
+                     turk.submit(data);
+                  });
+        //form.submit();
 }
 
     //Let's just log everything, because it's a lot easier to throw away
@@ -161,13 +171,6 @@ function log() {
 
 $(document).ready(function(){
     log("start");
-
-    // set text_index
-    form = document.forms['FirstForm'];
-    form.elements['text_index'].value = '{{select_text_index}}'; 
-    form.elements['start_position'].value = '{{start}}';
-    form.elements['gap'].value = '{{gap}}';
-    form.elements['worker_id'].value = '{{worker_id}}';
 
     //Load text to array
     var the_index = 0;
