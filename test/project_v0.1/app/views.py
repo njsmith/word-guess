@@ -43,6 +43,7 @@ def FillFirstForm():
     if "workerId" in request.args:
         worker_id = request.args["workerId"]
         
+    # Any text have not done by this worker
     available_text = text_dict.keys()
     have_done = User.query.filter_by(worker_id = worker_id)
     for hit in have_done:
@@ -50,6 +51,30 @@ def FillFirstForm():
         available_text.remove(removed)
     if len(available_text) == 0 :
         return redirect(url_for('Repeat'))
+
+    # Check text number
+    print available_text
+    temp_least = 99999
+    need_remove = []
+    for count in available_text:
+        print '--------------------------'
+        current_count = User.query.filter_by(text_index = count).count()
+        print str(count) + ' has:'
+        print current_count
+        print '--------------------------'
+        if current_count < temp_least:
+            temp_least = current_count
+    print 'the least number is: ' + str(temp_least)
+    for count in available_text:
+        current_count = User.query.filter_by(text_index = count).count()
+        print str(count) + ': ' +str(current_count) + '<' + str(temp_least) + 'is: '
+        print (current_count > temp_least)
+        if current_count > temp_least:
+            need_remove.append(count)
+    print need_remove
+    available_text = list(set(available_text)-set(need_remove)) 
+    print available_text
+    
 
     # Gap
     gap = 300
