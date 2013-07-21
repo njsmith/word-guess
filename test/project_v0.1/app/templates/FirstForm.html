@@ -151,7 +151,8 @@ function check_info()
                             "worker_id": '{{worker_id}}',
                             "text_index": '{{select_text_index}}',
                             "start_position": '{{start}}',
-                            "gap": '{{gap}}'})
+                            "gap": '{{gap}}',
+                            "hit_id": '{{hit_id}}'})
                   .always(function() {
                      turk.submit(data);
                   });
@@ -244,5 +245,6 @@ $(document).ready(function(){
 	{{form.text_index}}
 	{{form.start_position}}
 	{{form.gap}}
+	{{form.hit_id}}
     </div>
 </form>
