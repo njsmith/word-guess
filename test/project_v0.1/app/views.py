@@ -79,9 +79,7 @@ def FillFirstForm():
     available_text = list(set(available_text)-set(need_remove)) 
 
     # Gap
-    gap = 300
-    # Start position
-    start = random.randint(1, 1+gap)
+    gap = 4
     # Generate a ID for this HIT
     hit_id = uuid.uuid4().hex
    
@@ -95,6 +93,14 @@ def FillFirstForm():
     for parag in range (0, parag_num):
         paraglen[parag] = len(select_text[parag])
         print paraglen[parag]
+
+    # the number test need to be done for each position
+    number_each_position = 20
+    select_text_number = User.query.filter_by(text_index = select_text_index).count()
+    # Start position
+    start = (gap + 1) - (select_text_number / number_each_position)
+    if start < 1:
+        start = random.randint(1, 1+gap)
 
     #When sent user a text
     #save a copy to Pending as well
