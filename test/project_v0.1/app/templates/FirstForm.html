@@ -76,6 +76,7 @@ You won't be penalized for guessing wrong, but try to do the best you can.
 <script  language=javascript>  
 <!-- Initialize Variables -->
 var submit_url = "{{url_for("FillFirstForm")}}";
+var disappear_url = "{{url_for("disappear")}}";
 var startWord = {{start}};
 var wordGap = {{gap}};
 var div_index = 1;
@@ -201,7 +202,22 @@ $(document).ready(function(){
     display_text[display_text_index] = temp_sentence;
 	
 	$("#main_text").append( display_text[0]);
-	
+
+	if (!turk.previewMode) {
+	   window.onbeforeunload = function() {
+                log("unload");
+                $.ajax(disappear_url,
+                       {"async": false,
+                        "type": "POST",
+                        "data":{    "result": JSON.stringify(data),
+                            "worker_id": '{{worker_id}}',
+                            "text_index": '{{select_text_index}}',
+                            "start_position": '{{start}}',
+                            "gap": '{{gap}}',
+                            "hit_id": '{{hit_id}}',}
+                        });
+            };
+        }
 });
 </script> 
 

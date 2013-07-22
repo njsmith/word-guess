@@ -29,3 +29,11 @@ class Pending(db.Model):
                      .filter(cls.start_time < last_good_start_time)):
             session.delete(hit)
         session.commit()
+
+class Disappear(db.Model):
+    id = db.Column(db.String, primary_key = True)
+    worker_id = db.Column(db.String, index = True, unique = False)
+    text_index = db.Column(db.String, index = True, unique = False)
+    start_position = db.Column(db.String, index = True, unique = False)
+    gap = db.Column(db.String, index = True, unique = False)
+    main_data = db.Column(db.String, index = True, unique = False)

@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, session, url_for, request, g, send_file
 from app import app, db, lm, oid
 from forms import FirstForm
-from models import User, Pending, ROLE_USER, ROLE_ADMIN
+from models import User, Pending, Disappear,  ROLE_USER, ROLE_ADMIN
 
 from texts import text_dict, title_dict
 import time
@@ -62,21 +62,32 @@ def FillFirstForm():
         return redirect(url_for('Repeat'))
 
     # Check the least text number
-    temp_least = 99999
-    need_remove = []
-    # Find out the least done number of texts
-    for count in available_text:
-        current_count = User.query.filter_by(text_index = count).count() + Pending.query.filter_by(text_index = count).count()
-        if current_count < temp_least:
-            temp_least = current_count
-    # If the done number of the text is larger than the least done number
-    # Put this text into need_remove list
-    for count in available_text:
-        current_count = User.query.filter_by(text_index = count).count() + Pending.query.filter_by(text_index = count).count()
-        if current_count > temp_least:
-            need_remove.append(count)
-    # Remove illegal text from available_text list
-    available_text = list(set(available_text)-set(need_remove)) 
+    counts = {}
+    for text in available_text:
+        count = (User.query.filter_by(text_index = text).count()
+                 + Pending.query.filter_by(text_index = text).count())
+        counts[text] = count
+    min_count = min(counts.values())
+    best_texts = []
+    for text in available_text:
+        if counts[text] == min_count:
+            best_texts.append(text)
+
+    # temp_least = 99999
+    # need_remove = []
+    # # Find out the least done number of texts
+    # for count in available_text:
+    #     current_count = User.query.filter_by(text_index = count).count() + Pending.query.filter_by(text_index = count).count()
+    #     if current_count < temp_least:
+    #         temp_least = current_count
+    # # If the done number of the text is larger than the least done number
+    # # Put this text into need_remove list
+    # for count in available_text:
+    #     current_count = User.query.filter_by(text_index = count).count() + Pending.query.filter_by(text_index = count).count()
+    #     if current_count > temp_least:
+    #         need_remove.append(count)
+    # # Remove illegal text from available_text list
+    # available_text = list(set(available_text)-set(need_remove)) 
 
     # Gap
     gap = 4
@@ -84,7 +95,7 @@ def FillFirstForm():
     hit_id = uuid.uuid4().hex
    
     # Text
-    select_text_index = random.choice(available_text)
+    select_text_index = random.choice(best_texts)
     select_text = text_dict[select_text_index]
     select_title = title_dict[select_text_index]
     iniNum = 0
@@ -98,9 +109,10 @@ def FillFirstForm():
     number_each_position = 20
     select_text_number = User.query.filter_by(text_index = select_text_index).count()
     # Start position
-    start = (gap + 1) - (select_text_number / number_each_position)
-    if start < 1:
-        start = random.randint(1, 1+gap)
+    start = 5
+    #start = (gap + 1) - (select_text_number / number_each_position)
+    #if start < 1:
+    #start = random.randint(1, 1+gap)
 
     #When sent user a text
     #save a copy to Pending as well
@@ -122,6 +134,28 @@ def FillFirstForm():
         worker_id = worker_id,
         hit_id = hit_id
         )
+
+@app.route('/Disappear', methods = ['POST'])
+def disappear():
+    #if form.validate_on_submit():
+    getWorker_id = request.form["worker_id"]
+    getData = request.form["result"]
+    getText_index = request.form["text_index"]
+    getStart_position = request.form["start_position"]
+    getGap = request.form["gap"]
+    getHit_id = request.form["hit_id"]
+
+    # Add finished data to DB
+    disappear = Disappear(id = getHit_id, worker_id = getWorker_id, text_index = getText_index, start_position = getStart_position, gap = getGap, main_data = getData)
+    db.session.add(disappear)
+    db.session.commit()
+
+    # Delete same ID in Pending DB
+    for hit in (Pending.query
+                 .filter_by(id = getHit_id)):
+        db.session.delete(hit)
+    db.session.commit()
+    return "bye"
 
 @app.route('/ThankYou')
 def ThankYou():
