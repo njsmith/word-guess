@@ -95,13 +95,8 @@ var other_language = "";
 var age;
 var input_word = [];
 var event_log = [];
-var data = [language,
-            dialect,
-            other_language,
-            age,
-	    input_word,
-            event_log,
-	    ];
+var data = {};
+data["input_word"] = []
 </script>
 
 <script  language=javascript>  
@@ -114,7 +109,8 @@ function check()
 	   var word = document.getElementById("inputWord").value;
            var word_number = (input_word_index*wordGap) + startWord + input_word_index;
            input_word_index++;
-	   data[4][array_index] = [ text_array[word_number].number,word];
+	   data["input_word"].push( [ text_array[word_number].number,word] ); 
+           //data["input_word"][array_index] = [ text_array[word_number].number,word];
 
 	   array_index++;
 	   $("#main_text").append( display_text[array_index] );
@@ -139,10 +135,10 @@ function check_info()
 {
         form = document.forms['FirstForm'];
 
-        data[0] = form.elements['language'].value;
-        data[1] = form.elements['dialect'].value;
-        data[2] = form.elements['other_language'].value;
-        data[3] = form.elements['age'].value;
+        data["language"] = form.elements['language'].value;
+        data["dialect"] = form.elements['dialect'].value;
+        data["other_language"] = form.elements['other_language'].value;
+        data["age"] = form.elements['age'].value;
 
         log("submit");
 
@@ -160,6 +156,7 @@ function check_info()
         //form.submit();
 }
 
+    data["event_log"] = []
     //Let's just log everything, because it's a lot easier to throw away
     //useless data than it is to re-run the experiment... 
 function log() {
@@ -168,7 +165,7 @@ function log() {
       var args = Array.prototype.slice.call(arguments);
       args.unshift(new Date().toISOString());
       console.log(args);
-      data[5].push(args);
+      data["event_log"].push(args);
   }
 
 $(document).ready(function(){
