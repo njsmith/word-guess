@@ -1,5 +1,5 @@
 from flask import render_template, flash, redirect, session, url_for, request, g, send_file
-from app import app, db, lm, oid
+from app import app, db #, lm, oid
 from forms import FirstForm
 from models import User, Pending, Disappear,  ROLE_USER, ROLE_ADMIN
 
@@ -116,9 +116,10 @@ def FillFirstForm():
 
     #When sent user a text
     #save a copy to Pending as well
-    pending = Pending(id = hit_id, worker_id = worker_id, text_index = select_text_index, start_position = start, gap = gap, start_time = time.time())
-    db.session.add(pending)
-    db.session.commit()
+    if not is_preview:
+        pending = Pending(id = hit_id, worker_id = worker_id, text_index = select_text_index, start_position = start, gap = gap, start_time = time.time())
+        db.session.add(pending)
+        db.session.commit()
 
     return render_template('FirstForm.html', 
         title = 'First Form',

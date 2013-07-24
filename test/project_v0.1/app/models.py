@@ -7,17 +7,17 @@ ROLE_ADMIN = 1
 class User(db.Model):
     id = db.Column(db.String, primary_key = True)
     worker_id = db.Column(db.String, index = True, unique = False)
-    text_index = db.Column(db.String, index = True, unique = False)
-    start_position = db.Column(db.String, index = True, unique = False)
-    gap = db.Column(db.String, index = True, unique = False)
+    text_index = db.Column(db.Integer, index = True, unique = False)
+    start_position = db.Column(db.Integer, index = True, unique = False)
+    gap = db.Column(db.Integer, index = True, unique = False)
     main_data = db.Column(db.String, index = True, unique = False)
 
 class Pending(db.Model):
     id = db.Column(db.String, primary_key = True)
     worker_id = db.Column(db.String, index = True, unique = False)
-    text_index = db.Column(db.String, index = True, unique = False)
-    start_position = db.Column(db.String, index = True, unique = False)
-    gap = db.Column(db.String, index = True, unique = False)
+    text_index = db.Column(db.Integer, index = True, unique = False)
+    start_position = db.Column(db.Integer, index = True, unique = False)
+    gap = db.Column(db.Integer, index = True, unique = False)
     start_time = db.Column(db.Float)
 
     @classmethod
@@ -33,7 +33,7 @@ class Pending(db.Model):
 class Disappear(db.Model):
     id = db.Column(db.String, primary_key = True)
     worker_id = db.Column(db.String, index = True, unique = False)
-    text_index = db.Column(db.String, index = True, unique = False)
-    start_position = db.Column(db.String, index = True, unique = False)
-    gap = db.Column(db.String, index = True, unique = False)
+    text_index = db.Column(db.Integer, index = True, unique = False)
+    start_position = db.Column(db.Integer, index = True, unique = False)
+    gap = db.Column(db.Integer, index = True, unique = False)
     main_data = db.Column(db.String, index = True, unique = False)
