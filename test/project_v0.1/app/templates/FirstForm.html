@@ -4,10 +4,11 @@
 </head>
 <style type="text/css">
 .text_container {
-   margin-right: 100px;
+   margin-right: 140px;
 }
-#input_text {
-   margin-right: -100px;
+#inputWord {
+   width: 150px;
+   margin-right: -130px;
 }
 .overlay {
     opacity: 0.3;
@@ -40,11 +41,13 @@
 HIT</div>
 {% endif %}
 
+<!--
 <h1>The Word-Guess Experiment</h1>
 
 <hr>
-<h2>Informed consent</h2>
-<p>By completing this HIT you are giving your consent to participate
+-->
+
+<p>Note: By completing this HIT you are giving your consent to participate
 in a  research study by Professor Roger Levy of the University of
 California at San Diego.&nbsp; Please take a moment to <a
 href="{{url_for("static", filename="consent.html")}}"
@@ -66,12 +69,15 @@ you read: <br>
 Then you might guess the next word is "inside", or "along", or any
 number of things. Type your guess into the box, and then press Enter.
 Then we'll show you what word was actually there, and give you a
-chance to guess another word. <br>
+chance to guess another word.<br>
 <br>
-You won't be penalized for guessing wrong, but try to do the best you can.
+Sometimes it may be very difficult to guess what word comes next. Don't worry!
+This is normal, and you won't be penalized for guessing wrong -- but try to do
+the best you can! If you're not sure, then try to say something that at least
+makes sense in context.
 <hr>
-
-<h2>Title: {{text_title}}</h2>
+<i>This article is called...</i>
+<h2>{{text_title}}</h2>
 
 <script  language=javascript>  
 <!-- Initialize Variables -->
@@ -100,7 +106,7 @@ data["input_word"] = []
 </script>
 
 <script  language=javascript>  
-function check()
+function check(event)
 {
     var word_number2 = (input_word_index*wordGap) + startWord + input_word_index;
     log("keydown", text_array[word_number2].number, event.which);
@@ -133,16 +139,21 @@ function check()
 
 function check_info()
 {
+        $("input").prop("disabled", true);
+
         form = document.forms['FirstForm'];
 
         data["language"] = form.elements['language'].value;
         data["dialect"] = form.elements['dialect'].value;
         data["other_language"] = form.elements['other_language'].value;
         data["age"] = form.elements['age'].value;
+        data["comments"] = form.elements['comments'].value;
 
         log("submit");
 
         form.elements['main_data'].value = JSON.stringify(data); 
+
+        window.onbeforeunload = undefined;
 
         $.post(submit_url, {"result": JSON.stringify(data),
                             "worker_id": '{{worker_id}}',
@@ -170,6 +181,8 @@ function log() {
 
 $(document).ready(function(){
     log("start");
+
+    $("#inputWord").on("keydown", check);
 
     //Load text to array
     var the_index = 0;
@@ -225,13 +238,15 @@ $(document).ready(function(){
     <span id="main_text"></span>
     
     <span id="input_text">
-    	<input type="text" id="inputWord" onkeydown="check()">
+    	<!--<input type="text" id="inputWord" onkeydown="check()">-->
+        <input type="text" id="inputWord">
     </span>
     </p>
 
     <!--input id="Button1" type="button"  value="Check" onclick="check()" /-->
     <hr id="hr1">
     <div id="user_display" style="display:none">
+      That's the end. We have some questions (optional, but appreciated!):
         <p>
          What is your native language or languages?
 	 <input type="text" id="language">
@@ -248,6 +263,10 @@ $(document).ready(function(){
 	  How old are you?
 	  <input type="text" id="age">
 	</p>
+        <p>
+          Any other comments on this HIT?
+        </p>
+        <textarea rows="5" cols="50" id="comments"></textarea>
     <p><input type= button  value="Submit!" onclick="check_info()"></p>
     
     <hr id="hr2">

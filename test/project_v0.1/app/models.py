@@ -10,7 +10,7 @@ class User(db.Model):
     text_index = db.Column(db.Integer, index = True, unique = False)
     start_position = db.Column(db.Integer, index = True, unique = False)
     gap = db.Column(db.Integer, index = True, unique = False)
-    main_data = db.Column(db.String, index = True, unique = False)
+    main_data = db.Column(db.String)
 
 class Pending(db.Model):
     id = db.Column(db.String, primary_key = True)
@@ -36,4 +36,4 @@ class Disappear(db.Model):
     text_index = db.Column(db.Integer, index = True, unique = False)
     start_position = db.Column(db.Integer, index = True, unique = False)
     gap = db.Column(db.Integer, index = True, unique = False)
-    main_data = db.Column(db.String, index = True, unique = False)
+    main_data = db.Column(db.String)
