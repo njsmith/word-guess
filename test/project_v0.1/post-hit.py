@@ -7,7 +7,7 @@ from boto.mturk.qualification import (LocaleRequirement,
                                       PercentAssignmentsApprovedRequirement,
                                       Qualifications)
 
-ASSIGNMENTS_PER_HIT = 20
+ASSIGNMENTS_PER_HIT = 14
 REWARD = 0.30
 
 #HOST = "mechanicalturk.sandbox.amazonaws.com"

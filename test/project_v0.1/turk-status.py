@@ -1,45 +1,24 @@
 import sys
-import re
-from boto.mturk.connection import MTurkConnection
 
-#HOST = "mechanicalturk.sandbox.amazonaws.com"
-HOST = "mechanicalturk.amazonaws.com"
+from turkutil import connect, get_our_HITs, get_all
 
-title_re = re.compile("uess words in text.*for SCIENCE")
-
-secrets = []
-for line in open("secrets.txt"):
-    line = line.strip()
-    if not line or line.startswith("#"):
-        continue
-    secrets.append(line)
-aws_access_key_id, aws_secret_access_key = secrets
-mtc = MTurkConnection(aws_access_key_id=aws_access_key_id,
-                      aws_secret_access_key=aws_secret_access_key,
-                      host=HOST)
-
-def get_matching_HITs(mtc, regex):
-    HITs = []
-    for HIT in mtc.get_all_hits():
-        if title_re.search(HIT.Title):
-            HITs.append(HIT)
-    return HITs
+mtc = connect(sandbox=False)
 
 if len(sys.argv) > 1 and sys.argv[1] == "--expire-all":
     print("Expiring all outstanding HITs...")
-    for HIT in get_matching_HITs(mtc, title_re):
+    for HIT in get_our_HITs(mtc):
         mtc.expire_hit(HIT.HITId)
     print("...done")
 # Re-fetch after expiring, so as to make sure we have up-to-date information.
-HITs = get_matching_HITs(mtc, title_re)
+HITs = get_our_HITs(mtc)
 live = 0
-bad_workers = set()
+bad_workers = {}
 need_reviewed = set()
 total_cost = 0
 pending_cost = 0
 max_future_cost = 0
 for HIT in HITs:
-    assignments = mtc.get_assignments(HIT.HITId, page_size=50)
+    assignments = get_all(mtc.get_assignments, HIT.HITId)
     approved = 0
     pending = 0
     for assignment in assignments:
@@ -49,7 +28,7 @@ for HIT in HITs:
             need_reviewed.add(HIT.HITId)
             pending += 1
         elif assignment.AssignmentStatus == u"Rejected":
-            bad_workers.add(assignment.WorkerId)
+            bad_workers.setdefault(assignment.WorkerId, []).append(HIT.HITId)
         else:
             raise ValueError, assignment.AssignmentStatus
     reward = float(HIT.Amount)
@@ -80,8 +59,8 @@ print("Maximum future cost: %0.2f + 10%% = $%0.3f"
          1.10 * (total_cost + pending_cost + max_future_cost)))
 print("")
 print("Bad workers:")
-for worker in bad_workers:
-    print("  " + worker)
+for worker, hits in bad_workers.iteritems():
+    print("  %s (in: %s)" % (worker, hits))
 print("")
 if need_reviewed:
     print("HITs needing review:")
