@@ -38,9 +38,11 @@ for id, worker_id, text_index, start_position, gap, main_data in r:
         # do not json.loads first line of csv file
         if id != "id":
             data = json.loads(main_data)
-            input.append( data["input_word"]  )
-    else:
-        print worker_id
+            # filter non native English speaker
+            if "english" in (data["language"].lower() ):
+                input.append( data["input_word"]  )
+            else:
+                print data["language"]
 for hit in input:
     for word in hit:
         # Initialize the dicts
