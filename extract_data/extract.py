@@ -2,6 +2,15 @@ import csv, sys, string
 import json
 from texts import text_dict
 
+bad_workers = [ "A3EVMHAEXZE4WE",
+                "AQE1530F9RI0Q",
+                "A1DARMCWVOLTJ6",
+                "A7T2BQ927EXO9",
+                "ACFBUSLSNUGRU",
+                "A2AT0G92TP7HCG",
+                "A3LIEITJ1JLBY1",
+                "A2VDDES6LFZOFW" ]
+
 csv.field_size_limit(sys.maxint)
 
 total = {}
@@ -24,11 +33,14 @@ i = 0
 # Load all input data to list "input"
 input = []
 for id, worker_id, text_index, start_position, gap, main_data in r:
-    # do not json.loads first line of csv file
-    if id != "id":
-        data = json.loads(main_data)
-        input.append( data["input_word"]  )
-
+    # filter bad workers
+    if worker_id not in bad_workers:
+        # do not json.loads first line of csv file
+        if id != "id":
+            data = json.loads(main_data)
+            input.append( data["input_word"]  )
+    else:
+        print worker_id
 for hit in input:
     for word in hit:
         # Initialize the dicts
@@ -59,8 +71,8 @@ for hit in input:
 # Get probability
 probability = {}
 for key in total:
-   print "Correct: " + str(key) + ": " + str( correct[key])
-   print "Total: " + str( key ) + ": " + str ( total[key] )
+   #print "Correct: " + str(key) + ": " + str( correct[key])
+   #print "Total: " + str( key ) + ": " + str ( total[key] )
    probability[key] = correct[key] / (total[key] * 1.0)
 
 probability = sorted(probability.items(), key=lambda d:d[0])
