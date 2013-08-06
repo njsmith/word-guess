@@ -28,7 +28,6 @@ for text_index in text_dict:
             origin[ word[0] ] = temp2
 
 r = csv.reader(open("data.csv"))
-i = 0
 
 # Load all input data to list "input"
 input = []
@@ -79,12 +78,22 @@ for key in total:
 
 probability = sorted(probability.items(), key=lambda d:d[0])
 
+# Load N-Gram Probs
+rn = csv.reader(open("brown-ngram-probs.csv"))
+n_gram = {}
+for code, probs in rn:
+    n_gram[code] = probs
+
 # Write to CSV file
 w = csv.writer(file('cloze.csv','wb'))
  
-w.writerow( ["code", "probability"])
-for row in probability:
-    w.writerow(row)
+w.writerow( ["code", "Cloze Probability", "N-Gram Probability"])
+for code, prob in probability:
+    if str(code) in n_gram.keys():
+        n_gram_prob = n_gram[ str(code) ]
+    else:
+        n_gram_prob = 'no data'
+    w.writerow([code, prob, n_gram_prob ])
     
 # 'row' is a Python list, where each entry in the list is one
 #entry from the csv file
