@@ -11,6 +11,10 @@ bad_workers = [ "A3EVMHAEXZE4WE",
                 "A3LIEITJ1JLBY1",
                 "A2VDDES6LFZOFW" ]
 
+total_responses = 0
+bad_worker_count = 0
+bad_language_count = 0
+
 csv.field_size_limit(sys.maxint)
 
 total = {}
@@ -32,16 +36,27 @@ r = csv.reader(open("data.csv"))
 # Load all input data to list "input"
 input = []
 for id, worker_id, text_index, start_position, gap, main_data in r:
+    total_responses += 1
     # filter bad workers
     if worker_id not in bad_workers:
         # do not json.loads first line of csv file
         if id != "id":
             data = json.loads(main_data)
             # filter non native English speaker
-            if "english" in (data["language"].lower() ):
+            language = data["language"].lower().strip()
+            if ("english" in language
+                or language in ["engish", "englisb", "englilsh"]):
                 input.append( data["input_word"]  )
             else:
                 print data["language"]
+                bad_language_count += 1
+    else:
+        bad_worker_count += 1
+
+print "Total responses:", total_responses
+print "Bad workers:", bad_worker_count
+print "Bad language:", bad_language_count
+
 for hit in input:
     for word in hit:
         # Initialize the dicts
@@ -87,12 +102,13 @@ for code, probs in rn:
 # Write to CSV file
 w = csv.writer(file('cloze.csv','wb'))
  
-w.writerow( ["code", "Cloze Probability", "N-Gram Probability"])
+w.writerow( ["code", "ClozeProb", "NGramProb"])
 for code, prob in probability:
-    if str(code) in n_gram.keys():
-        n_gram_prob = n_gram[ str(code) ]
-    else:
-        n_gram_prob = 'no data'
+    n_gram_prob = n_gram.get(str(code), "NA")
+    # if str(code) in n_gram.keys():
+    #     n_gram_prob = n_gram[ str(code) ]
+    # else:
+    #     n_gram_prob = 'no data'
     w.writerow([code, prob, n_gram_prob ])
     
 # 'row' is a Python list, where each entry in the list is one

@@ -42,6 +42,6 @@ position_probability = sorted(position_probability.items(), key=lambda d:d[0])
 # Write to CSV file
 w = csv.writer(file('position_vs_probs.csv','wb'))
  
-w.writerow( ["position", "Average Probability"])
+w.writerow( ["position", "AverageProb"])
 for row in position_probability:
     w.writerow(row)
