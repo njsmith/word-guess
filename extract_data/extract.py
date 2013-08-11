@@ -89,10 +89,7 @@ probability = {}
 for key in total:
    #print "Correct: " + str(key) + ": " + str( correct[key])
    #print "Total: " + str( key ) + ": " + str ( total[key] )
-    if correct[key] == 0:
-        correct[key] = 1
-        total[key] += 1
-    probability[key] = correct[key] / (total[key] * 1.0)
+    probability[key] = (correct[key] +1.0)  / (total[key]+1.0)
 
 probability = sorted(probability.items(), key=lambda d:d[0])
 
