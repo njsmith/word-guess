@@ -15,6 +15,8 @@ total_responses = 0
 bad_worker_count = 0
 bad_language_count = 0
 
+text_count = {}
+
 csv.field_size_limit(sys.maxint)
 
 total = {}
@@ -31,9 +33,13 @@ for text_index in text_dict:
             temp2 = temp.translate(string.maketrans("",""), string.punctuation)
             origin[ word[0] ] = temp2
 
+# Initialize the text_count
 r = csv.reader(open("data.csv"))
+for id, worker_id, text_index, start_position, gap, main_data in r:
+    text_count[ text_index ] = 0
 
 # Load all input data to list "input"
+r = csv.reader(open("data.csv"))
 input = []
 for id, worker_id, text_index, start_position, gap, main_data in r:
     total_responses += 1
@@ -47,6 +53,7 @@ for id, worker_id, text_index, start_position, gap, main_data in r:
             if ("english" in language
                 or language in ["engish", "englisb", "englilsh"]):
                 input.append( data["input_word"]  )
+                text_count[ text_index ] += 1
             else:
                 print data["language"]
                 bad_language_count += 1
@@ -115,3 +122,8 @@ for code, prob in probability:
 #entry from the csv file
     # The first row has the column names; the ones after that have data from one
     # database entry.
+
+# Print the number for each text
+text_count = sorted(text_count.items(), key=lambda d:d[1])
+for text in text_count:
+    print 'The text' + str(text[0]) + ': ' + str(text[1])
